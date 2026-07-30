@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FLY LABS DATABASE</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1 class="main-title">FLY LABS DATABASE</h1>
+        <div class="date-time">
+            <span id="current-day" class="current-day"></span>
+            <span id="current-time" class="current-time"></span>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <select class="page-selector" onchange="showPage(this.value)">
+            <option value="page-database">🪰 FLY DATABASE</option>
+            <option value="page-data">📊 FLY DATA</option>
+            <option value="page-qa">❓ Q&A</option>
+            <option value="page-archive">📁 LOGS</option>
+        </select>
+    </div>
+
+    <!-- Page 1: FLY DATABASE -->
+    <div id="page-database" class="page active">
+        <div class="card">
+            <h3>Current Fly Status</h3>
+            <table>
+                <tr>
+                    <th>Rank</th>
+                    <th>Status</th>
+                    <th>Name</th>
+                    <th>Day</th>
+                    <th>Observation Time</th>
+                    <th>Personality</th>
+                </tr>
+                <tr>
+                    <td>🥇</td>
+                    <td class="red">● DEAD</td>
+                    <td>Timmy</td>
+                    <td>Day 1</td>
+                    <td>12 Hours</td>
+                    <td>Resilient, calm survivor.</td>
+                </tr>
+                <tr>
+                    <td>🥈</td>
+                    <td class="yellow">● ESCAPED</td>
+                    <td>Timmy II</td>
+                    <td>Day 3</td>
+                    <td>5 Hours 5 Minutes</td>
+                    <td>Sugar addict. Nervous.</td>
+                </tr>
+                <tr>
+                    <td>🥉</td>
+                    <td class="green"><span class="observing-dot"></span>OBSERVING</td>
+                    <td>Timmy III</td>
+                    <td>Day 3</td>
+                    <td class="timer" id="timer3"></td>
+                    <td>Explorer. Very fast walker.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="green"><span class="observing-dot"></span>OBSERVING</td>
+                    <td>Timmy IV</td>
+                    <td>Day 3</td>
+                    <td class="timer" id="timer4"></td>
+                    <td>Escape artist. Grooms frequently.</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="personality-grid">
+            <div class="personality-card">
+                <div class="personality-name">Timmy</div>
+                <div class="personality-trait red">Status: Deceased</div>
+                <div class="personality-description">
+                    Very resilient surviving ~12 hours in the original enclosure. Missing one leg (5/6 legs), and lived deprived of oxygen for over 6 hours and still pushing on. Outlived the spider and three other flies. Very calm and tolerated handling well.
+                </div>
+            </div>
+            <div class="personality-card">
+                <div class="personality-name">Timmy II</div>
+                <div class="personality-trait yellow">Status: Escaped</div>
+                <div class="personality-description">
+                    Loved sugar water more than anything. Nearly 80% of the observation period was spent eating or bathing in it. Somehow escaped despite no obvious opening.
+                </div>
+            </div>
+            <div class="personality-card">
+                <div class="personality-name">Timmy III</div>
+                <div class="personality-trait">Status: Active</div>
+                <div class="personality-description">
+                    The explorer. Constantly patrols every inch of the enclosure. Very fast walker - covers ground rapidly. Frequently hangs from the ceiling and nudges Timmy IV with his legs.
+                </div>
+            </div>
+            <div class="personality-card">
+                <div class="personality-name">Timmy IV</div>
+                <div class="personality-trait">Status: Active</div>
+                <div class="personality-description">
+                    Small but determined. ~1.3x smaller than Timmy III. Constantly attempts escape near enclosure edges. Spends much time grooming and drinking sugar water while being pestered by Timmy III.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: FLY DATA -->
+    <div id="page-data" class="page">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Flies Observed</div>
+                <div class="stat-value">4</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Currently Active</div>
+                <div class="stat-value">2</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Average Lifespan</div>
+                <div class="stat-value" id="avg-lifespan">8.5h</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Current Day</div>
+                <div class="stat-value">3</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Lifespan Leaderboard</h3>
+            <canvas id="lifespan-chart"></canvas>
+        </div>
+
+        <div class="card">
+            <h3>Personality Traits Comparison</h3>
+            <canvas id="personality-chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Page 3: Q&A -->
+    <div id="page-qa" class="page">
+        <div class="card">
+            <h3>Frequently Asked Questions</h3>
+            
+            <div class="qa-item">
+                <div class="question">Q: How much space do these flies have?</div>
+                <div class="answer">
+                    A: The flies are housed in a transparent plastic cylinder cup enclosure measuring approximately 5.5 inches in height, and 3.5 inches in diameter, providing a total volume of 53 cubic inches. This space allows for natural flight patterns, exploration behaviors, and sufficient room for multiple flies to coexist without overcrowding. The enclosure dimensions were specifically chosen to balance observational accessibility with the flies' need for movement space.
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">Q: Are the flies being harmed? Are they being starved?</div>
+                <div class="answer">
+                    A: The flies are under constant observation with their well-being as the top priority. They are provided with a bottle cap filled with fresh sugar water daily, which serves as their primary nutritional source meeting their caloric needs. Additionally, small pieces of fruit are periodically introduced to supplement their diet with natural sugars and nutrients. The enclosure is monitored regularly for any signs of distress, health issues, or inadequate resources. No harmful procedures are conducted; this is purely an observational study of natural fly behavior in a controlled environment.
+                </div>
+            </div>
+
+            <div class="qa-item">
+                <div class="question">Q: How long do they live and what happens if they die?</div>
+                <div class="answer">
+                    A: Lifespan calculations are currently being compiled as I observe them through their natural life cycles. Based on current data, the average lifespan appears to be approximately 8.5 hours, though individual variation is significant. If a fly dies within the enclosure, a complete cleanout and sterilization protocol is initiated to maintain hygienic conditions for any remaining inhabitants. This ensures that the death does not negatively impact the living flies and allows for proper documentation of the end-of-life process. The enclosure is then thoroughly cleaned before any new subjects are introduced.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: ARCHIVE -->
+    <div id="page-archive" class="page">
+        <div class="card">
+            <h3>Daily Logs</h3>
+            
+            <div class="archive-entry">
+                <div class="archive-date">Day 3</div>
+                <div class="archive-log">
+                    <span class="log-time">1:20pm</span>
+                    Caught and is now residing in Timmy's old enclosure
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">1:25pm</span>
+                    The fly found the sugar water cap and went to town on it
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">4:40pm</span>
+                    I caught the fly floating in its water cap unresponsive, worried that it drowned I shook the container making it jolt up and fly around for a second, its all good!
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">6:25pm</span>
+                    <span class="alert">ALERT ALERT</span> somehow Timmy II escaped, I have no idea how but one second he was chilling in his water cap and the next he is just gone
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">6:25pm</span>
+                    TEST 2 - CURRENT RECORDS: #1: Timmy (12h), #2 Timmy II (5.5h)
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">6:35pm</span>
+                    New Fly captured, I saw 3 flies in the house, I accidently killed one trying to capture it, I did get one meaning there is one fly left in case I want Timmy III to have a friend
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">6:42pm</span>
+                    2nd Fly captured Timmy IV, they both appear to be exploring around and drinking up, one of the flies looks smaller than the other I'm going to assume the small one is Timmy IV but he looks to be around 1.3x smaller than Timmy III
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">7:21pm</span>
+                    <span class="alert">ALERT</span> Timmy IV ESCAPED! but i managed to re-catch him and tediously place him back inside the container, I resecured the perimeter of it and now they are both back together again
+                </div>
+                <div class="archive-log">
+                    <span class="log-time">7:30pm</span>
+                    Timmy IV went missing again, I searched the entire cage and couldn't find him, and I saw a fly in my room at my window, I'm like how did he escape again? as I secured him in my smaller cup to transport I accidently killed it, as I went to re-secure the Jar I realized that Timmy IV never left, he must've hid somewhere, so it was a false alarm, a non contained Fly died
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
