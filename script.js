@@ -22,30 +22,49 @@ const flyData = {
     }
 };
 
-// Set the actual start dates
-flyData.timmy3.start.setHours(18);
-flyData.timmy3.start.setMinutes(35);
-flyData.timmy4.start.setHours(18);
-flyData.timmy4.start.setMinutes(41);
+// Set the actual start dates to today at the specified times
+const today = new Date();
+flyData.timmy3.start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 35, 0);
+flyData.timmy4.start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 41, 0);
 
-// Timer function
-function timer(start, id) {
+// Timer function - only calculates hours, doesn't update DOM
+function calculateHours(start) {
     let diff = Math.floor((Date.now() - start) / 1000);
+    
+    // Handle negative diff (if start time is in the future)
+    if (diff < 0) {
+        diff = 0;
+    }
+    
+    let h = Math.floor(diff / 3600);
+    let m = Math.floor((diff % 3600) / 60);
+    let s = diff % 60;
+    return h + (m / 60) + (s / 3600);
+}
+
+// Timer display function - updates DOM with formatted time
+function updateTimerDisplay(start, id) {
+    let diff = Math.floor((Date.now() - start) / 1000);
+    
+    // Handle negative diff (if start time is in the future)
+    if (diff < 0) {
+        diff = 0;
+    }
+    
     let h = Math.floor(diff / 3600);
     let m = Math.floor((diff % 3600) / 60);
     let s = diff % 60;
     
     const element = document.getElementById(id);
     if (element) {
-        element.innerHTML = h + "h " + m + "m " + s + "s";
+        element.textContent = h + "h " + m + "m " + s + "s";
     }
-    return h + (m / 60) + (s / 3600);
 }
 
 // Get current hours for active flies
 function getFlyHours(flyKey) {
     if (flyData[flyKey].status === 'active') {
-        return timer(flyData[flyKey].start, flyData[flyKey].elementId);
+        return calculateHours(flyData[flyKey].start);
     }
     return flyData[flyKey].hours;
 }
@@ -110,15 +129,15 @@ function showPage(pageId) {
 // Initialize charts and timers when page loads
 document.addEventListener('DOMContentLoaded', function() {
     // Initial timer update
-    timer(flyData.timmy3.start, "timer3");
-    timer(flyData.timmy4.start, "timer4");
+    updateTimerDisplay(flyData.timmy3.start, "timer3");
+    updateTimerDisplay(flyData.timmy4.start, "timer4");
     updateAverageLifespan();
     updateDateTime();
     
     // Update timers every second
     setInterval(() => {
-        timer(flyData.timmy3.start, "timer3");
-        timer(flyData.timmy4.start, "timer4");
+        updateTimerDisplay(flyData.timmy3.start, "timer3");
+        updateTimerDisplay(flyData.timmy4.start, "timer4");
         updateAverageLifespan();
     }, 1000);
     
