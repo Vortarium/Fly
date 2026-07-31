@@ -44,20 +44,27 @@ function calculateHours(start) {
 
 // Timer display function - updates DOM with formatted time
 function updateTimerDisplay(start, id) {
-    let diff = Math.floor((Date.now() - start) / 1000);
-    
-    // Handle negative diff (if start time is in the future)
-    if (diff < 0) {
-        diff = 0;
-    }
-    
-    let h = Math.floor(diff / 3600);
-    let m = Math.floor((diff % 3600) / 60);
-    let s = diff % 60;
-    
-    const element = document.getElementById(id);
-    if (element) {
-        element.textContent = h + "h " + m + "m " + s + "s";
+    try {
+        let diff = Math.floor((Date.now() - start) / 1000);
+        
+        // Handle negative diff (if start time is in the future)
+        if (diff < 0) {
+            diff = 0;
+        }
+        
+        let h = Math.floor(diff / 3600);
+        let m = Math.floor((diff % 3600) / 60);
+        let s = diff % 60;
+        
+       const element = document.getElementById(id);
+        if (element) {
+            element.textContent = h + "h " + m + "m " + s + "s";
+            console.log(`Updated ${id}: ${h}h ${m}m ${s}s`);
+        } else {
+            console.error(`Element ${id} not found`);
+        }
+    } catch (error) {
+        console.error('Error updating timer display:', error);
     }
 }
 
@@ -71,44 +78,57 @@ function getFlyHours(flyKey) {
 
 // Update average lifespan
 function updateAverageLifespan() {
-    const timmy1Hours = flyData.timmy1.hours;
-    const timmy2Hours = flyData.timmy2.hours;
-    const timmy3Hours = getFlyHours('timmy3');
-    const timmy4Hours = getFlyHours('timmy4');
-    
-    const avg = (timmy1Hours + timmy2Hours + timmy3Hours + timmy4Hours) / 4;
-    const avgElement = document.getElementById('avg-lifespan');
-    if (avgElement) {
-        avgElement.textContent = avg.toFixed(1) + 'h';
+    try {
+        const timmy1Hours = flyData.timmy1.hours;
+        const timmy2Hours = flyData.timmy2.hours;
+        const timmy3Hours = getFlyHours('timmy3');
+        const timmy4Hours = getFlyHours('timmy4');
+        
+        const avg = (timmy1Hours + timmy2Hours + timmy3Hours + timmy4Hours) / 4;
+        const avgElement = document.getElementById('avg-lifespan');
+        if (avgElement) {
+            avgElement.textContent = avg.toFixed(1) + 'h';
+        }
+        
+        console.log(`Lifespan data: [${timmy1Hours.toFixed(2)}, ${timmy2Hours.toFixed(2)}, ${timmy3Hours.toFixed(2)}, ${timmy4Hours.toFixed(2)}]`);
+        return [timmy1Hours, timmy2Hours, timmy3Hours, timmy4Hours];
+    } catch (error) {
+        console.error('Error updating average lifespan:', error);
+        return [12, 5.08, 0, 0];
     }
-    
-    return [timmy1Hours, timmy2Hours, timmy3Hours, timmy4Hours];
 }
 
 // Update current date and time
 function updateDateTime() {
-    const now = new Date();
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    
-    const dayName = days[now.getDay()];
-    const monthName = months[now.getMonth()];
-    const day = now.getDate();
-    const year = now.getFullYear();
-    
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    
-    const dayElement = document.getElementById('current-day');
-    const timeElement = document.getElementById('current-time');
-    
-    if (dayElement) {
-        dayElement.textContent = `${dayName}, ${monthName} ${day}, ${year}`;
-    }
-    
-    if (timeElement) {
-        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+    try {
+        const now = new Date();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+        const dayName = days[now.getDay()];
+        const monthName = months[now.getMonth()];
+        const day = now.getDate();
+        const year = now.getFullYear();
+        
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        
+        const dayElement = document.getElementById('current-day');
+        const timeElement = document.getElementById('current-time');
+        
+        if (dayElement) {
+            dayElement.textContent = `${dayName}, ${monthName} ${day}, ${year}`;
+        }
+        
+        if (timeElement) {
+            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+            console.log(`Updated time: ${hours}:${minutes}:${seconds}`);
+        } else {
+            console.error('Time element not found');
+        }
+    } catch (error) {
+        console.error('Error updating date/time:', error);
     }
 }
 
@@ -126,31 +146,31 @@ function showPage(pageId) {
     }
 }
 
-// Initialize charts and timers when page loads
-function initializeApp() {
-    console.log('Initializing app...');
+// Global chart variable
+let lifespanChart = null;
+
+// Initialize charts when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
     
-    // Initial timer update
+    // Initial updates
     updateTimerDisplay(flyData.timmy3.start, "timer3");
     updateTimerDisplay(flyData.timmy4.start, "timer4");
     updateAverageLifespan();
     updateDateTime();
     
-    console.log('Initial updates complete');
-    
-    // Update timers every second
+    // Simple setInterval for timers
     setInterval(() => {
         updateTimerDisplay(flyData.timmy3.start, "timer3");
         updateTimerDisplay(flyData.timmy4.start, "timer4");
         updateAverageLifespan();
     }, 1000);
     
-    // Update date/time every second
+    // Simple setInterval for date/time
     setInterval(updateDateTime, 1000);
     
     // Lifespan chart
     const lifespanCtx = document.getElementById('lifespan-chart');
-    let lifespanChart;
     if (lifespanCtx) {
         lifespanChart = new Chart(lifespanCtx, {
             type: 'line',
@@ -198,17 +218,16 @@ function initializeApp() {
                 }
             }
         });
+        
+        // Update chart every second
+        setInterval(() => {
+            if (lifespanChart) {
+                const hours = updateAverageLifespan();
+                lifespanChart.data.datasets[0].data = hours;
+                lifespanChart.update('none');
+            }
+        }, 1000);
     }
-    
-    // Update lifespan chart live
-    setInterval(() => {
-        if (lifespanChart) {
-            const hours = updateAverageLifespan();
-            lifespanChart.data.datasets[0].data = hours;
-            lifespanChart.update('none');
-        }
-    }, 1000);
-    
     
     // Personality traits chart
     const personalityCtx = document.getElementById('personality-chart');
@@ -282,17 +301,5 @@ function initializeApp() {
         });
     }
     
-    console.log('App initialization complete');
-}
-
-// Try multiple methods to ensure script runs
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeApp);
-} else {
-    initializeApp();
-}
-
-// Fallback: also try window.onload
-window.onload = function() {
-    setTimeout(initializeApp, 100);
-};
+    console.log('Initialization complete');
+});
