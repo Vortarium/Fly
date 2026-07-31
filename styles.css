@@ -294,6 +294,10 @@ canvas {
     color: gold;
 }
 
+.blue {
+    color: #00aaff;
+}
+
 .personality-description {
     color: #ccc;
     line-height: 1.5;
