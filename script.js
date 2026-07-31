@@ -66,13 +66,6 @@ function updateAverageLifespan() {
     return [timmy1Hours, timmy2Hours, timmy3Hours, timmy4Hours];
 }
 
-// Update timers every second
-setInterval(() => {
-    timer(flyData.timmy3.start, "timer3");
-    timer(flyData.timmy4.start, "timer4");
-    updateAverageLifespan();
-}, 1000);
-
 // Update current date and time
 function updateDateTime() {
     const now = new Date();
@@ -100,10 +93,6 @@ function updateDateTime() {
     }
 }
 
-// Update date/time every second
-setInterval(updateDateTime, 1000);
-updateDateTime();
-
 // Page navigation
 function showPage(pageId) {
     // Hide all pages
@@ -118,8 +107,24 @@ function showPage(pageId) {
     }
 }
 
-// Initialize charts when page loads
+// Initialize charts and timers when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    // Initial timer update
+    timer(flyData.timmy3.start, "timer3");
+    timer(flyData.timmy4.start, "timer4");
+    updateAverageLifespan();
+    updateDateTime();
+    
+    // Update timers every second
+    setInterval(() => {
+        timer(flyData.timmy3.start, "timer3");
+        timer(flyData.timmy4.start, "timer4");
+        updateAverageLifespan();
+    }, 1000);
+    
+    // Update date/time every second
+    setInterval(updateDateTime, 1000);
+    
     // Lifespan chart
     const lifespanCtx = document.getElementById('lifespan-chart');
     let lifespanChart;
