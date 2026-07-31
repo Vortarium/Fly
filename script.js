@@ -127,12 +127,16 @@ function showPage(pageId) {
 }
 
 // Initialize charts and timers when page loads
-document.addEventListener('DOMContentLoaded', function() {
+function initializeApp() {
+    console.log('Initializing app...');
+    
     // Initial timer update
     updateTimerDisplay(flyData.timmy3.start, "timer3");
     updateTimerDisplay(flyData.timmy4.start, "timer4");
     updateAverageLifespan();
     updateDateTime();
+    
+    console.log('Initial updates complete');
     
     // Update timers every second
     setInterval(() => {
@@ -277,4 +281,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
+    
+    console.log('App initialization complete');
+}
+
+// Try multiple methods to ensure script runs
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
+
+// Fallback: also try window.onload
+window.onload = function() {
+    setTimeout(initializeApp, 100);
+};
